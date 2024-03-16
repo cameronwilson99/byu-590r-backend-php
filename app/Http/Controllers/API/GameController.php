@@ -9,6 +9,7 @@ class GameController extends BaseController
 {
     /**
      * Display a listing of the resource.
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -17,6 +18,17 @@ class GameController extends BaseController
             $game->image = $this->getS3Url($game->image);
         }
         return $this->sendResponse($games, 'Games retrieved successfully.');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show($id) {
+        $game = Game::where('id', $id)->first();
+
+        $game->image = $this->getS3Url($game->image);
+
+        return $this->sendResponse($game, 'Game retrieved successfully.');
     }
 
     /**
@@ -31,14 +43,6 @@ class GameController extends BaseController
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Game $game)
     {
         //
     }
