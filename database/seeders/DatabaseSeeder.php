@@ -20,11 +20,12 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            UsersSeeder::class
-        ]);
-
-        $this->call([
-            GameSeeder::class
+            UsersSeeder::class,
+            GameSeeder::class,
+            CategorySeeder::class,
+            PublisherSeeder::class,
+            CategoriesGamesSeeder::class,
+            ReviewsSeeder::class,
         ]);
     }
 }

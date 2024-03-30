@@ -37,4 +37,7 @@ Route::middleware('auth:sanctum')->group( function () {
     });
 
     Route::resource('games', GameController::class);
+    Route::controller(GameController::class)->group(function(){
+        Route::post('books/{id}/update_game_image', 'updateGameImage');
+    });
 });
