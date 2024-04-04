@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('image');
             $table->double('price');
             $table->integer('stock');
+            $table->timestamps();
         });
     }
 
