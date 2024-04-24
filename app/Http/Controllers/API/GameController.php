@@ -25,11 +25,13 @@ class GameController extends BaseController
         return $this->sendResponse($games, 'Games retrieved successfully.');
     }
 
+    //get categories
     public function getCategories() {
         $categories = Category::get();
         return $this->sendResponse($categories, 'Categories retrieved successfully.');
     }
 
+    //get publishers
     public function getPublishers() {
         $publishers = Publisher::get();
         return $this->sendResponse($publishers, 'Publishers retrieved successfully.');
