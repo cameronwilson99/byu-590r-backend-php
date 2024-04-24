@@ -29,7 +29,7 @@ class GamesMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Games Mail',
+            subject: 'Games Currently In Stock',
         );
     }
 

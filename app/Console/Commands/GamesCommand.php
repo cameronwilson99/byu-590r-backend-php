@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\GamesMail;
 use Illuminate\Console\Command;
 use App\Models\Game;
+use Illuminate\Support\Facades\Mail;
 
 class GamesCommand extends Command
 {
@@ -19,7 +21,7 @@ class GamesCommand extends Command
      *
      * @var string
      */
-    protected $description = 'This sends an email report summary of all games to stakeholders.';
+    protected $description = 'This sends an email report summary of all games to customers.';
 
     /**
      * Execute the console command.
@@ -31,11 +33,11 @@ class GamesCommand extends Command
             error_log('Please provide an email address to send the report to.');
             return Command::FAILURE;
         }
-        $games = Game::where('stock', '=', 0)->get();
+        
+        $games = Game::where('stock', '>', 0)->get();
 
-        if ($games->isEmpty()) {
-            error_log('No games found.');
-            return Command::FAILURE;
-        }
+        Mail::to($sendToEmail)->send(new GamesMail($games));
+
+        return Command::SUCCESS;
     }
 }
