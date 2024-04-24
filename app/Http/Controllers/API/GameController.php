@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Category;
 use App\Models\Game;
+use App\Models\Publisher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,11 +18,21 @@ class GameController extends BaseController
      */
     public function index()
     {
-        $games = Game::orderBy('id', 'desc')->with('publisher', 'categories', 'reviews')->get();
+        $games = Game::orderBy('id', 'desc')->with('publisher', 'categories')->get();
         foreach ($games as $game) {
             $game->image = $this->getS3Url($game->image);
         }
         return $this->sendResponse($games, 'Games retrieved successfully.');
+    }
+
+    public function getCategories() {
+        $categories = Category::get();
+        return $this->sendResponse($categories, 'Categories retrieved successfully.');
+    }
+
+    public function getPublishers() {
+        $publishers = Publisher::get();
+        return $this->sendResponse($publishers, 'Publishers retrieved successfully.');
     }
 
     /**
@@ -86,6 +99,21 @@ class GameController extends BaseController
             $game->image = $this->getS3Url($game->image);
         }
         $success['game'] = $game;
+
+        if($request['categories']) {
+            $categories = collect($request['categories'])->toArray();
+            $categories_games = [];
+            foreach($categories as $category){
+                $categoryIds = explode(",", $category);
+                foreach($categoryIds as $categoryId) {
+                    array_push($categories_games, [
+                        'category_id' => $categoryId,
+                        'game_id' => $game->id
+                    ]);
+                }
+            }
+            DB::table('categories_games')->insert($categories_games);
+        }
         return $this->sendResponse($success, 'Game updated successfully.');
     }
 
